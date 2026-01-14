@@ -69,6 +69,10 @@ export class PollService {
   }
 
   async getHistory() {
+    const active = await this.pollRepo.findActive();
+    if (active && remainingSeconds(active.startTime, active.duration) === 0) {
+      await this.pollRepo.markStatus(active.id, "closed");
+    }
     return this.pollRepo.listHistory();
   }
 

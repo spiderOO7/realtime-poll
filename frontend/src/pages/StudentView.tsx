@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { PollOptions } from "../components/PollOptions";
 import { PollTimer } from "../components/PollTimer";
 import { useSocket } from "../hooks/useSocket";
@@ -23,11 +23,12 @@ export const StudentView = ({
   const navigate = useNavigate();
   const [tempName, setTempName] = useState("");
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectionError, setSelectionError] = useState<string | null>(null);
 
   useEffect(() => {
-     if (remaining === 1 && selectedOption && !pollState.studentVote) {
-         pollState.vote(selectedOption);
-     }
+    if (remaining <= 1 && selectedOption && !pollState.studentVote) {
+      pollState.vote(selectedOption);
+    }
   }, [remaining, selectedOption, pollState.studentVote]);
 
   useEffect(() => {
@@ -44,14 +45,20 @@ export const StudentView = ({
     };
   }, [name, sessionId, socket]);
 
-  const canVote = useMemo(
-    () =>
-      pollState.activePoll &&
-      !pollState.error &&
-      remaining > 0 &&
-      !pollState.studentVote,
-    [pollState.activePoll, pollState.error, pollState.studentVote, remaining]
-  );
+  useEffect(() => {
+    setSelectedOption(null);
+    setSelectionError(null);
+  }, [pollState.activePoll?.id]);
+
+  const handleSubmit = () => {
+    if (remaining <= 0) return;
+    if (!selectedOption) {
+      setSelectionError("Please select an option before submitting.");
+      return;
+    }
+    setSelectionError(null);
+    pollState.vote(selectedOption);
+  };
 
   if (!name) {
     return (
@@ -192,7 +199,10 @@ export const StudentView = ({
                   disabled={!!pollState.studentVote || remaining === 0}
                   showResults={Boolean(remaining === 0)}
                   onSelect={(id) => {
-                    if (!pollState.studentVote && remaining > 0) setSelectedOption(id);
+                    if (!pollState.studentVote && remaining > 0) {
+                      setSelectionError(null);
+                      setSelectedOption(id);
+                    }
                   }}
                 />
               </div>
@@ -210,11 +220,16 @@ export const StudentView = ({
                <button 
                   className="button" 
                   style={{marginTop: 16, width: "100%"}}
-                  disabled={!selectedOption}
-                  onClick={() => selectedOption && pollState.vote(selectedOption)}
+                  onClick={handleSubmit}
                 >
                   Submit Vote
                </button>
+            )}
+
+            {selectionError && (
+              <div className="alert" style={{ marginTop: 12 }}>
+                {selectionError}
+              </div>
             )}
 
             {pollState.studentVote && (
