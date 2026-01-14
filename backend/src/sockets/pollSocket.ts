@@ -1,5 +1,5 @@
 import { Server, Socket } from "socket.io";
-import { PollService } from "../services/pollService";
+import { PollService } from "../services/PollService";
 
 const emitError = (socket: Socket, message: string) => {
   socket.emit("error:poll", { message });

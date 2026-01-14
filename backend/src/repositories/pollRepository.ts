@@ -1,4 +1,4 @@
-import { PollDocument, PollModel, PollOption, PollStatus } from "../models/poll";
+import { PollDocument, PollModel, PollOption, PollStatus } from "../models/Poll";
 
 export class PollRepository {
   async create(question: string, options: PollOption[], duration: number, startTime: Date) {

@@ -4,13 +4,13 @@ import http from "http";
 import mongoose from "mongoose";
 import { Server } from "socket.io";
 import { config } from "./config/env";
-import { PollController } from "./controllers/pollController";
+import { PollController } from "./controllers/PollController";
 import { errorHandler } from "./middlewares/errorHandler";
 import { PollRepository } from "./repositories/pollRepository";
 import { VoteRepository } from "./repositories/voteRepository";
 import { buildPollRoutes } from "./routes/pollRoutes";
 import { registerPollSocket } from "./sockets/pollSocket";
-import { PollService } from "./services/pollService";
+import { PollService } from "./services/PollService";
 
 const app = express();
 app.use(cors({ origin: config.clientOrigin, credentials: true }));

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { PollController } from "../controllers/pollController";
+import { PollController } from "../controllers/PollController";
 import { asyncHandler } from "../utils/asyncHandler";
 
 export const buildPollRoutes = (controller: PollController) => {

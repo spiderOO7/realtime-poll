@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PollService } from "../services/pollService";
+import { PollService } from "../services/PollService";
 
 export class PollController {
   constructor(private pollService: PollService) {}

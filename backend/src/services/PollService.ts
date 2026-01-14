@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { PollDocument, PollOption } from "../models/poll";
+import { PollDocument, PollOption } from "../models/Poll";
 import { PollRepository } from "../repositories/pollRepository";
 import { VoteRepository } from "../repositories/voteRepository";
 import { remainingSeconds } from "../utils/time";
@@ -52,7 +52,7 @@ export class PollService {
       await this.pollRepo.markStatus(poll.id, "closed");
       throw new Error("Poll expired");
     }
-    const optionExists = poll.options.some((opt) => opt.id === optionId);
+    const optionExists = poll.options.some((opt: PollOption) => opt.id === optionId);
     if (!optionExists) {
       throw new Error("Invalid option");
     }
